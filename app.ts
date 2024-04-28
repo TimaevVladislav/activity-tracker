@@ -1,5 +1,3 @@
-import { Request, Response } from "express";
-
 const cors = require("cors");
 const path = require("path");
 const express = require("express");
@@ -9,6 +7,7 @@ const { connect } = require("./database");
 const { extensionMiddleware } = require("./middlewares/extension.middleware");
 
 import mongoose from "mongoose";
+import { Request, Response } from "express";
 import TrackSchema from "./models/track.schema";
 import { body, validationResult } from "express-validator";
 
@@ -21,7 +20,7 @@ const app = express();
 
 app.use(cors({ preflightContinue: false, optionsSuccessStatus: 200 }));
 app.use(extensionMiddleware);
-app.use(express.static(path.join(__dirname, "./dist/src")));
+app.use(express.static(path.join(__dirname, "./src")));
 app.use(bodyParser.json());
 
 app.post(
@@ -61,5 +60,5 @@ app.listen(8888, () => {
 });
 
 client.get(["/1.html", "/2.html", "/3.html"], (req: Request, res: Response) => {
-  res.sendFile(path.join(__dirname, "./client/index.html"));
+  res.sendFile(path.join(__dirname, "./src/index.html"));
 });
