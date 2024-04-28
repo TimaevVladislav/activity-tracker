@@ -6,6 +6,12 @@ class Tracker {
   private buffer: any[] = [];
   private lastSent: number = Date.now();
 
+  constructor() {
+    window.addEventListener("beforeunload", () => {
+      this.sendData();
+    });
+  }
+
   public track(event: string, ...tags: string[]): void {
     this.buffer.push({
       event,
