@@ -26,10 +26,23 @@ app.use(bodyParser.json());
 app.post(
   "/track",
   [
-    body("*.event").exists().bail().isString().withMessage("event must be a string").bail(),
-    body("*.tags").exists().bail().isArray().withMessage("tags must be an array"),
+    body("*.event")
+      .exists()
+      .bail()
+      .isString()
+      .withMessage("event must be a string")
+      .bail(),
+    body("*.tags")
+      .exists()
+      .bail()
+      .isArray()
+      .withMessage("tags must be an array"),
     body("*.url").exists().bail().withMessage("url must be a valid URL"),
-    body("*.title").exists().bail().isString().withMessage("title must be a string"),
+    body("*.title")
+      .exists()
+      .bail()
+      .isString()
+      .withMessage("title must be a string"),
     body("*.ts").exists().bail().isInt().withMessage("ts must be an integer"),
   ],
   (req: Request, res: Response) => {
@@ -42,12 +55,13 @@ app.post(
 
     Track.insertMany(events)
       .then(() => {
-        res.status(200).send("Data received");
+        console.log("Data received");
       })
       .catch((err: any) => {
         console.error(err);
-        res.status(422).send("Failed to insert data");
       });
+
+    res.status(200).send("Data received");
   },
 );
 
