@@ -6,7 +6,6 @@
     "strict": true,
     "esModuleInterop": true
   },
-  "include": [
-    "./src/client/**/*.ts", "."],
+  "include": ["./src/client/**/*.ts", "."],
   "exclude": ["node_modules"]
 }

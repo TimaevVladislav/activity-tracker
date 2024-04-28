@@ -2,9 +2,9 @@
 
 ## Сборка и запуск приложения
 
-```bash
+````bash
 npm install
 
 ```bash
 npm run start
-```
+````
