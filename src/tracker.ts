@@ -23,7 +23,7 @@ class Tracker {
       ts: Math.floor(Date.now() / 1000)
     })
 
-    this.dispatchUserActivity()
+    this.checkBufferInterval()
   }
 
   private checkBufferInterval(): void {
