@@ -18,7 +18,7 @@ const app = express()
 app.use(bodyParser.json())
 app.use(cors({ preflightContinue: false, optionsSuccessStatus: 200 }))
 app.use(extensionMiddleware)
-app.use(express.static(path.join(__dirname, "./dist/src")))
+app.use(express.static(path.join(__dirname, "./src")))
 
 app.post("/track", validationMiddleware, (req: Request, res: Response) => {
   const events = req.body
