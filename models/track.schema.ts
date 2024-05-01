@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose")
 
 const TrackSchema = new mongoose.Schema(
   {
@@ -6,9 +6,9 @@ const TrackSchema = new mongoose.Schema(
     tags: { type: Array, required: true },
     url: { type: String, required: true },
     title: { type: String, required: true },
-    ts: { type: Number, required: true },
+    ts: { type: Number, required: true }
   },
-  { strict: true },
-);
+  { strict: true }
+)
 
-export default TrackSchema;
+export default TrackSchema

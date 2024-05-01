@@ -1,15 +1,17 @@
 interface Window {
-  tracker: Tracker;
+  tracker: Tracker
 }
 
 class Tracker {
-  private buffer: any[] = [];
-  private lastSent: number = Date.now();
+  private buffer: any[] = []
+  private lastSent: number = Date.now()
+  private interval: number = 1000
+  private minEvents: number = 3
 
   constructor() {
     window.addEventListener("beforeunload", () => {
-      this.sendData();
-    });
+      this.dispatchUserActivity()
+    })
   }
 
   public track(event: string, ...tags: string[]): void {
@@ -18,28 +20,42 @@ class Tracker {
       tags,
       url: window.location.href,
       title: document.title,
-      ts: Math.floor(Date.now() / 1000),
-    });
+      ts: Math.floor(Date.now() / 1000)
+    })
 
-    this.sendData();
+    this.dispatchUserActivity()
   }
 
-  private sendData(): void {
-    if (this.buffer.length < 3 && Date.now() - this.lastSent < 1000) {
-      return;
+  private checkBufferInterval(): void {
+    if (Date.now() - this.lastSent >= this.interval) {
+      this.dispatchUserActivity()
     }
+  }
 
-    fetch("http://localhost:8888/track", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(this.buffer),
-    })
-      .then(() => {
-        this.buffer = [];
-        this.lastSent = Date.now();
+  private dispatchUserActivity(): void {
+    if (this.buffer.length >= this.minEvents) {
+      const tracks = this.buffer.slice()
+      this.buffer = []
+
+      fetch("http://localhost:8888/track", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(tracks)
       })
-      .catch(() => setTimeout(() => this.sendData(), 1000));
+          .then(() => {
+            this.lastSent = Date.now()
+          })
+          .catch(() => {
+            this.buffer.unshift(...tracks)
+
+            if (this.buffer.length) {
+              setTimeout(() => {
+                this.checkBufferInterval()
+              }, this.interval)
+            }
+          })
+    }
   }
 }
 
-window.tracker = new Tracker();
+window.tracker = new Tracker()
